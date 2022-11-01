@@ -1,0 +1,149 @@
+{
+	"info": {
+		"_postman_id": "6aaf96a9-cc6a-4f2f-a57e-ca274c1f22f1",
+		"name": "Recipe-Service",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Save all recipes",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "default"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "[\r\n    {\r\n        \"recipeName\": \"veg sandwich\",\r\n        \"vegetarian\": true,\r\n        \"noOfServing\": 9,\r\n        \"instructions\": \"add vegetables,bread\"\r\n    },\r\n  {\r\n        \"recipeName\": \"non veg sandwich\",\r\n        \"vegetarian\": false,\r\n        \"noOfServing\": 5,\r\n        \"instructions\": \"add vegetables,bread\"\r\n    }\r\n]",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/v1/recipes",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"recipes"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get recipe by Id",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "default",
+						"disabled": true
+					},
+					{
+						"key": "Accept",
+						"value": "application/ecmascript",
+						"type": "default",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/v1/recipe/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"recipe",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Filter recipes based on include filter",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"pageNumber\": 0,\r\n    \"pageSize\": 10,\r\n    \"inIngredients\": [\"Ham\"]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/v1/recipe/filter",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"recipe",
+						"filter"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Filter Recipes based on exclude filter",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"pageNumber\": 0,\r\n    \"pageSize\": 10,\r\n    \"notInIngredients\": [\"Ham\"]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/v1/recipe/filter",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"recipe",
+						"filter"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
