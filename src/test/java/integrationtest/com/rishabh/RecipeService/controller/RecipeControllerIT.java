@@ -239,7 +239,7 @@ class RecipeControllerIT extends AbstractContainerBaseTest {
     }
 
     private Recipe createRecipe() {
-        Recipe recipe = Recipe.builder()
+        return Recipe.builder()
                 .recipeName("Vegetable Sandwich")
                 .isVegetarian(true)
                 .noOfServing(1)
@@ -250,7 +250,6 @@ class RecipeControllerIT extends AbstractContainerBaseTest {
                         Ingredient.builder().ingredientName("Cucumber").build(),
                         Ingredient.builder().ingredientName("tomato").build()))
                 .build();
-        return recipe;
     }
 
     private String getUrl(String url) {
