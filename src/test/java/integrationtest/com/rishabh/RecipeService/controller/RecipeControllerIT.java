@@ -8,7 +8,6 @@ import com.rishabh.RecipeService.model.Recipe;
 import com.rishabh.RecipeService.model.RecipeSearchCriteria;
 import com.rishabh.RecipeService.repository.IngredientsRepository;
 import com.rishabh.RecipeService.repository.RecipeRepository;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -17,13 +16,11 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.http.*;
-import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.web.util.UriComponentsBuilder;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
-import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -66,8 +63,8 @@ class RecipeControllerIT extends AbstractContainerBaseTest {
 
     @BeforeEach
     void setUp() {
-       recipeRepository.deleteAll();
-       ingredientsRepository.deleteAll();
+        recipeRepository.deleteAll();
+        ingredientsRepository.deleteAll();
     }
 
 
@@ -92,7 +89,7 @@ class RecipeControllerIT extends AbstractContainerBaseTest {
         Recipe recipe = createRecipe();
         Recipe savedRecipe = recipeRepository.save(recipe);
 
-        String getURL = getUrl("/api/v1/recipe/"+ savedRecipe.getRecipeId());
+        String getURL = getUrl("/api/v1/recipe/" + savedRecipe.getRecipeId());
 
         ResponseEntity<Recipe> responseEntity = restTemplate.exchange(getURL, HttpMethod.GET, null, Recipe.class);
 
@@ -156,7 +153,8 @@ class RecipeControllerIT extends AbstractContainerBaseTest {
     @Test
     void getAllRecipesFilteredByIngredient() throws JsonProcessingException {
 
-        List<Recipe> recipeList = createMultipleRecipe();;
+        List<Recipe> recipeList = createMultipleRecipe();
+        ;
         recipeRepository.saveAll(recipeList);
 
         String getURL = getUrl("/api/v1/recipe/filter");
@@ -262,19 +260,21 @@ class RecipeControllerIT extends AbstractContainerBaseTest {
                 .recipeName("Vegetable Sandwich")
                 .isVegetarian(true)
                 .noOfServing(1)
-                .instructions("1) Cut slices for cucumber, onion, tomatoes. " +
+                .instructions("1) Cut slices for tomatoes. " +
                         "2) Spread tomato sauce on bread" +
                         "3) Add cheese and veggies inside bread")
-                .ingredients(List.of(Ingredient.builder().ingredientName("Cheese").calorie(50).fat(100).build()))
+                .ingredients(List.of(Ingredient.builder().ingredientName("Cheese").calorie(50).fat(100).build(),
+                        Ingredient.builder().ingredientName("tomato").build()))
                 .build();
         Recipe recipe2 = Recipe.builder()
                 .recipeName("Ham Sandwich")
                 .isVegetarian(false)
                 .noOfServing(2)
-                .instructions("1) Cut slices for cucumber, onion, tomatoes. " +
+                .instructions("1) Cut slices for cucumber, lettuce " +
                         "2) Spread tomato sauce on bread" +
                         "3) Add Ham and veggies inside bread")
-                .ingredients(List.of(Ingredient.builder().ingredientName("Ham").calorie(100).fat(200).build()))
+                .ingredients(List.of(Ingredient.builder().ingredientName("Ham").calorie(100).fat(200).build(),
+                        Ingredient.builder().ingredientName("lettuce").build()))
                 .build();
 
         recipeList.add(recipe1);

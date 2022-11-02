@@ -23,7 +23,7 @@ public class RecipeCriteriaRepository {
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
         CriteriaQuery<Recipe> criteriaQuery = criteriaBuilder.createQuery(Recipe.class).distinct(true);
         Root<Recipe> recipeRoot = criteriaQuery.from(Recipe.class);
-        Predicate predicate = getPredicate(recipeSearchCriteria, recipeRoot, criteriaBuilder);
+        Predicate predicate = getPredicate(recipeSearchCriteria, recipeRoot, criteriaBuilder, criteriaQuery);
         criteriaQuery.where(predicate);
 
         TypedQuery<Recipe> typedQuery = entityManager.createQuery(criteriaQuery);
@@ -34,7 +34,8 @@ public class RecipeCriteriaRepository {
 
     private Predicate getPredicate(final RecipeSearchCriteria recipeSearchCriteria,
                                    final Root<Recipe> recipeRoot,
-                                   final CriteriaBuilder criteriaBuilder) {
+                                   final CriteriaBuilder criteriaBuilder,
+                                   final CriteriaQuery criteriaQuery) {
         List<Predicate> predicates = new ArrayList<>();
 
         if (Objects.nonNull(recipeSearchCriteria.getIsVegetarian())) {
@@ -62,9 +63,19 @@ public class RecipeCriteriaRepository {
         }
 
         if (Objects.nonNull(recipeSearchCriteria.getNotInIngredients()) && !recipeSearchCriteria.getNotInIngredients().isEmpty()) {
-            Join<Ingredient, Recipe> join = recipeRoot.join("ingredients");
 
-            predicates.add(criteriaBuilder.not(join.get("ingredientName").in(recipeSearchCriteria.getNotInIngredients())));
+            for (String ingredientName : recipeSearchCriteria.getNotInIngredients()) {
+                // Initialize the subquery
+                Subquery<Long> subQuery = criteriaQuery.subquery(Long.class);
+                Root<Recipe> subQueryRecipe = subQuery.from(Recipe.class);
+                Join<Ingredient, Recipe> subQueryIngredient = subQueryRecipe.join("ingredients");
+
+                // Select the Recipe ID where one of their Ingredient matches
+                subQuery.select(subQueryRecipe.get("recipeId")).where(
+                        criteriaBuilder.equal(subQueryIngredient.get("ingredientName"), ingredientName));
+
+                predicates.add(recipeRoot.get("recipeId").in(subQuery).not());
+            }
         }
 
         return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
