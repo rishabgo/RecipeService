@@ -10,14 +10,12 @@ import com.rishabh.RecipeService.repository.IngredientsRepository;
 import com.rishabh.RecipeService.repository.RecipeRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.http.*;
 import org.springframework.test.context.TestPropertySource;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.web.util.UriComponentsBuilder;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
@@ -28,15 +26,7 @@ import java.util.Objects;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @Testcontainers
-@TestPropertySource(properties = {
-        "spring.datasource.url=${DB_URL}",
-        "spring.datasource.username=${DB_USERNAME}",
-        "spring.datasource.password=${DB_PASSWORD}",
-        "spring.datasource.driverClassName=${DB_DRIVER}",
-        "spring.jpa.hibernate.ddl-auto=update",
-        "spring.jpa.database-platform=org.hibernate.dialect.MySQL5InnoDBDialect"
-})
-@ExtendWith(SpringExtension.class)
+@TestPropertySource(locations = "/application-test.properties")
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
         classes = RecipeServiceApplication.class)
 class RecipeControllerIT extends AbstractContainerBaseTest {

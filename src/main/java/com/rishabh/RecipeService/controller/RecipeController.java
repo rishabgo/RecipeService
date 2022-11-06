@@ -2,6 +2,7 @@ package com.rishabh.RecipeService.controller;
 
 import com.rishabh.RecipeService.model.Recipe;
 import com.rishabh.RecipeService.model.RecipeSearchCriteria;
+import com.rishabh.RecipeService.payload.PostResponse;
 import com.rishabh.RecipeService.service.RecipeService;
 import lombok.NonNull;
 import org.springframework.http.HttpStatus;
@@ -20,6 +21,27 @@ public class RecipeController {
         this.recipeService = recipeService;
     }
 
+    @GetMapping("/recipe/{id}")
+    public ResponseEntity<Object> findRecipeById(@PathVariable final Long id) {
+        try {
+            Recipe recipe = recipeService.findRecipeById(id);
+            return new ResponseEntity<>(recipe, HttpStatus.OK);
+        } catch (Exception ex) {
+            return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @GetMapping("/recipes")
+    public ResponseEntity<PostResponse> findAllRecipes(
+            @RequestParam(value = "pageNo", required = false) final int pageNo,
+            @RequestParam(value = "pageSize", required = false) final int pageSize,
+            @RequestParam(value = "sortBy", required = false) final String sortBy,
+            @RequestParam(value = "sortOrder", required = false, defaultValue = "ASC") final String sortOrder) {
+
+        PostResponse response = recipeService.findAllRecipesWithPagination(pageNo, pageSize, sortBy, sortOrder);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
     @PostMapping("/recipes")
     public ResponseEntity<Integer> saveRecipes(@RequestBody List<Recipe> recipeList) {
 
@@ -31,16 +53,6 @@ public class RecipeController {
     public ResponseEntity<Recipe> saveRecipe(@NonNull @RequestBody Recipe recipe) {
         Recipe savedRecipe = recipeService.saveRecipe(recipe);
         return new ResponseEntity<>(savedRecipe, HttpStatus.CREATED);
-    }
-
-    @GetMapping("/recipe/{id}")
-    public ResponseEntity<Object> findRecipeById(@PathVariable final Long id) {
-        try {
-            Recipe recipe = recipeService.findRecipeById(id);
-            return new ResponseEntity<>(recipe, HttpStatus.OK);
-        } catch (Exception ex) {
-            return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
-        }
     }
 
     @PostMapping("/recipe/filter")

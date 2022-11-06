@@ -11,9 +11,13 @@ import java.util.List;
 @Builder
 public class RecipeSearchCriteria {
 
-    private Integer pageNumber = 0;
+    private Integer pageNumber;
 
-    private Integer pageSize = 10;
+    private Integer pageSize;
+
+    private String sortBy;
+
+    private String sortOrder;
 
     private Boolean isVegetarian;
 

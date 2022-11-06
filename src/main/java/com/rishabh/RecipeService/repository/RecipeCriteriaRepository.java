@@ -26,6 +26,12 @@ public class RecipeCriteriaRepository {
         Predicate predicate = getPredicate(recipeSearchCriteria, recipeRoot, criteriaBuilder, criteriaQuery);
         criteriaQuery.where(predicate);
 
+        if (recipeSearchCriteria.getSortOrder().equalsIgnoreCase("ASC")) {
+            criteriaQuery.orderBy(criteriaBuilder.asc(recipeRoot.get(recipeSearchCriteria.getSortBy())));
+        } else {
+            criteriaQuery.orderBy(criteriaBuilder.desc(recipeRoot.get(recipeSearchCriteria.getSortBy())));
+        }
+
         TypedQuery<Recipe> typedQuery = entityManager.createQuery(criteriaQuery);
         typedQuery.setFirstResult(recipeSearchCriteria.getPageNumber() * recipeSearchCriteria.getPageSize());
         typedQuery.setMaxResults(recipeSearchCriteria.getPageSize());
@@ -36,7 +42,7 @@ public class RecipeCriteriaRepository {
                                    final Root<Recipe> recipeRoot,
                                    final CriteriaBuilder criteriaBuilder,
                                    final CriteriaQuery criteriaQuery) {
-        List<Predicate> predicates = new ArrayList<>();
+        final List<Predicate> predicates = new ArrayList<>();
 
         if (Objects.nonNull(recipeSearchCriteria.getIsVegetarian())) {
             predicates.add(

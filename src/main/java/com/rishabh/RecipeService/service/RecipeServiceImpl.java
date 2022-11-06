@@ -3,10 +3,15 @@ package com.rishabh.RecipeService.service;
 import com.rishabh.RecipeService.exception.NotFoundException;
 import com.rishabh.RecipeService.model.Recipe;
 import com.rishabh.RecipeService.model.RecipeSearchCriteria;
+import com.rishabh.RecipeService.payload.PostResponse;
 import com.rishabh.RecipeService.repository.RecipeCriteriaRepository;
 import com.rishabh.RecipeService.repository.RecipeRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -76,6 +81,28 @@ public class RecipeServiceImpl implements RecipeService {
     public void saveAllRecipes(final List<Recipe> recipeList) {
         logger.info("Saving {} new recipes in DB", recipeList.size());
         recipeRepository.saveAll(recipeList);
+    }
+
+    @Override
+    public PostResponse findAllRecipesWithPagination(final int pageNo,
+                                                     final int pageSize,
+                                                     final String sortBy,
+                                                     final String sortOrder) {
+
+        Sort sort = (sortOrder.equals("ASC")) ? Sort.by(sortBy).ascending() : Sort.by(sortBy).descending();
+
+        Pageable pageable = PageRequest.of(pageNo, pageSize, sort);
+
+        Page<Recipe> recipePage = recipeRepository.findAll(pageable);
+
+        return PostResponse.builder()
+                .recipeList(recipePage.getContent())
+                .pageNo(recipePage.getNumber())
+                .pageSize(recipePage.getSize())
+                .totalElements(recipePage.getNumberOfElements())
+                .totalPages(recipePage.getTotalPages())
+                .lastPage(recipePage.isLast())
+                .build();
     }
 
 }
