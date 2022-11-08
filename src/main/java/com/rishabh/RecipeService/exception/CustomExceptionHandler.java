@@ -3,15 +3,16 @@ package com.rishabh.RecipeService.exception;
 import com.rishabh.RecipeService.model.ErrorResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.ControllerAdvice;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.time.OffsetDateTime;
 
-@ControllerAdvice
+@RestControllerAdvice
 public class CustomExceptionHandler {
 
-    @org.springframework.web.bind.annotation.ExceptionHandler(NotFoundException.class)
-    public ResponseEntity<ErrorResponse> notFoundExceptionHandler(IllegalArgumentException ex) {
+    @ExceptionHandler(NotFoundException.class)
+    public ResponseEntity<ErrorResponse> notFoundExceptionHandler(final NotFoundException ex) {
         final ErrorResponse errorResponse = ErrorResponse.builder()
                 .message(ex.getMessage())
                 .details("Invalid or missing query parameters")
@@ -22,7 +23,7 @@ public class CustomExceptionHandler {
 
     }
 
-    @org.springframework.web.bind.annotation.ExceptionHandler(Exception.class)
+    @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponse> handleAllException(Exception ex) {
 
         final ErrorResponse errorResponse = ErrorResponse.builder()

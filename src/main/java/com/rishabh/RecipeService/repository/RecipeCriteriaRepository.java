@@ -26,10 +26,12 @@ public class RecipeCriteriaRepository {
         Predicate predicate = getPredicate(recipeSearchCriteria, recipeRoot, criteriaBuilder, criteriaQuery);
         criteriaQuery.where(predicate);
 
-        if (recipeSearchCriteria.getSortOrder().equalsIgnoreCase("ASC")) {
-            criteriaQuery.orderBy(criteriaBuilder.asc(recipeRoot.get(recipeSearchCriteria.getSortBy())));
-        } else {
-            criteriaQuery.orderBy(criteriaBuilder.desc(recipeRoot.get(recipeSearchCriteria.getSortBy())));
+        if(recipeSearchCriteria.getSortOrder() != null){
+            if (recipeSearchCriteria.getSortOrder().equalsIgnoreCase("ASC")) {
+                criteriaQuery.orderBy(criteriaBuilder.asc(recipeRoot.get(recipeSearchCriteria.getSortBy())));
+            } else {
+                criteriaQuery.orderBy(criteriaBuilder.desc(recipeRoot.get(recipeSearchCriteria.getSortBy())));
+            }
         }
 
         TypedQuery<Recipe> typedQuery = entityManager.createQuery(criteriaQuery);

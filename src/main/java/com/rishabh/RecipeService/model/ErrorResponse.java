@@ -1,12 +1,12 @@
 package com.rishabh.RecipeService.model;
 
 import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
 import org.springframework.http.HttpStatus;
 
 import java.time.OffsetDateTime;
 
-@Data
+@Getter
 @Builder
 public class ErrorResponse {
 

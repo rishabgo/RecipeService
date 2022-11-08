@@ -3,13 +3,13 @@ package com.rishabh.RecipeService.controller;
 import org.testcontainers.containers.MySQLContainer;
 import org.testcontainers.junit.jupiter.Container;
 
-public class AbstractContainerBaseTest {
+public class ContainerBaseTest {
 
     @Container
-    static final MySQLContainer MY_SQL_CONTAINER;
+    public static final MySQLContainer MY_SQL_CONTAINER;
 
     static {
-        MY_SQL_CONTAINER = new MySQLContainer("mysql:latest");
+        MY_SQL_CONTAINER = new MySQLContainer("mysql:latest").withDatabaseName("recipe_db");
 
         MY_SQL_CONTAINER.start();
         System.setProperty("DB_URL", MY_SQL_CONTAINER.getJdbcUrl());

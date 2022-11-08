@@ -9,6 +9,7 @@ import com.rishabh.RecipeService.model.RecipeSearchCriteria;
 import com.rishabh.RecipeService.repository.IngredientsRepository;
 import com.rishabh.RecipeService.repository.RecipeRepository;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -29,7 +30,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @TestPropertySource(locations = "/application-test.properties")
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
         classes = RecipeServiceApplication.class)
-class RecipeControllerIT extends AbstractContainerBaseTest {
+class RecipeControllerIT extends ContainerBaseTest {
 
     @Test
     void contextLoads() {
@@ -88,10 +89,11 @@ class RecipeControllerIT extends AbstractContainerBaseTest {
     }
 
     @Test
-    void getAllRecipes() throws JsonProcessingException {
+    @DisplayName("Test getrecipe Filtered By Dynamic Filters")
+    void getRecipesFil() throws JsonProcessingException {
 
-        Recipe recipe = createRecipe();
-        recipeRepository.save(recipe);
+        List<Recipe> recipeList = createMultipleRecipe();
+        recipeRepository.saveAll(recipeList);
 
         String getURL = getUrl("/api/v1/recipe/filter");
 
