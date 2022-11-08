@@ -219,8 +219,8 @@ class RecipeControllerIT extends ContainerBaseTest {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
 
-        recipe.setRecipeName("Veg deluxe sandwich");
-        String jsonRequest = objectMapper.writeValueAsString(recipe);
+        Recipe updatedRecipe = recipe.withRecipeName("Veg deluxe sandwich");
+        String jsonRequest = objectMapper.writeValueAsString(updatedRecipe);
         ResponseEntity<Recipe> responseEntity = restTemplate.exchange(getURL, HttpMethod.PUT, new HttpEntity<>(jsonRequest, headers), Recipe.class);
 
         assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);

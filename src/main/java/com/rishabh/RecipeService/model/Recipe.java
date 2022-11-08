@@ -35,4 +35,8 @@ public class Recipe {
     private int noOfServing;
 
     private String instructions;
+
+    public Recipe withRecipeName(final String newRecipeName) {
+        return new Recipe(recipeId, newRecipeName, isVegetarian, ingredients, noOfServing, instructions);
+    }
 }
