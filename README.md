@@ -19,11 +19,6 @@ After downloading start application by running RecipeServiceApplication.java
 
 Postman collection: Recipe-Service.postman_collection.json
 
-# Architectural decision:
-1) For rest API creation, I decided to go with SpringBootRest API.
-2) For Database, I used In memory H2 Database. Since relational db can easily model the data. The structure of business data is very clear and the relationship between different entities(recipe, ingredient) is stable.
-3) To dynamically create different queries, I used Spring data JPA Criteria API.
-4) For Integration test I used test container for Mysql db running as container.
 
 
 
